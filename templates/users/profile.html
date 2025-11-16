@@ -1,0 +1,107 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="{% static 'css/users/profile.css' %}">
+    <link rel="icon" type="image/png" href="{% static 'images/TAlogo.png' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+</head>
+<body>
+   
+   
+    
+    
+   {% include 'users/header_default.html' %}
+   
+
+
+    <!-- Profile Form -->
+    <div class="container">
+        <h1>User Profile</h1>
+        <form id="profileForm" action="{% url 'profile' %}" method="post">
+            {% csrf_token %}
+            <div class="profile-section">
+                <h2>Personal Information</h2>
+                <div class="profile-form">
+                    <div class="profile-input">
+                        <label for="firstName">First Name :</label>
+                        <input type="text" id="firstName" name="firstName" value="{{ user_profile.first_name }}" readonly required>
+                    </div>
+                    <div class="profile-input">
+                        <label for="middleName">Middle Name :</label>
+                        <input type="text" id="middleName" name="middleName" value="{{ user_profile.middle_name }}" readonly>
+                    </div>
+                    <div class="profile-input">
+                        <label for="lastName">Last Name :</label>
+                        <input type="text" id="lastName" name="lastName" value="{{ user_profile.last_name }}" readonly required>
+                    </div>
+                    <div class="profile-input">
+                        <label for="homeAddress">Home Address :</label>
+                        <input type="text" id="homeAddress" name="homeAddress" value="{{ user_profile.home_address }}" readonly>
+                    </div>
+                    <div class="profile-input">
+                        <label for="birthdate">Birthdate :</label>
+                        <input type="text" id="birthdateDisplay" name="birthdateDisplay" value="{{ user_profile.birth_month }}-{{ user_profile.birth_day }}-{{ user_profile.birth_year }}" readonly>
+                        <input type="date" id="birthdate" name="birthdate" style="display:none;">
+                    </div>
+                    <div class="profile-input">
+                        <label for="gender">Gender :</label>
+                        <select id="gender" name="gender" disabled>
+                            <option value="male" {% if user_profile.gender == 'male' %}selected{% endif %}>Male</option>
+                            <option value="female" {% if user_profile.gender == 'female' %}selected{% endif %}>Female</option>
+                            <option value="other" {% if user_profile.gender == 'other' %}selected{% endif %}>Other</option>
+                        </select>
+                    </div>
+                </div>
+            
+                <button id="editBtn" class="edit-button" type="button" onclick="enableEditing()">Edit</button>
+                <button id="saveBtn"  class="edit-button" type="submit" style="display: none;">Save Profile</button>
+        
+            </div>
+        </form>
+        <div class="profile-section">
+            <h2>Assessment Results</h2>
+            {% if assessment_results %}
+                <ul class="assessment-list">
+                    {% for result in assessment_results %}
+                        <li>
+                            <strong>Test:</strong> {{ result.test_type }}<br>
+                            <strong>Score:</strong> {{ result.score }}/{{ result.total_questions }} ({{ result.percentage|floatformat:2 }}%)<br>
+                            <span>Date Taken: {{ result.date_taken|date:"F j, Y, g:i A" }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No assessments taken yet.</p>
+            {% endif %}
+        </div>
+        
+
+    {% if messages %}
+    <div class="modal" id="myModal" style="display: block;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h2>Profile Status</h2>
+            </div>
+            <div class="modal-body">
+                {% for message in messages %}
+                    <p class="{{ message.tags }}">{{ message }}</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <script src="{% static 'js/users/profile.js' %}"></script>
+    <script>
+          function toggleNav() {
+  const navbar = document.getElementById('navbar');
+  navbar.classList.toggle('show'); 
+}
+    </script>
+</body>
+</html>

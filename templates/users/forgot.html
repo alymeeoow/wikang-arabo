@@ -1,0 +1,129 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Forgot Password</title>
+
+  <!-- Link to CSS -->
+  <link rel="stylesheet" href="{% static 'css/users/login.css' %}" />
+  <link rel="icon" type="image/png" href="{% static 'images/TAlogo.png' %}" />
+</head>
+
+<body>
+  <div class="login-container">
+    <div class="login-box">
+      <!-- Logo and Title -->
+      <div class="login-header">
+        <img src="{% static 'images/TAlogo.png' %}" alt="WIKANG ARABO Logo" class="logo" />
+        <h1>FORGOT PASSWORD</h1>
+        <p class="subtitle">Bridging Languages, Connecting Cultures</p>
+      </div>
+
+
+      <div id="messages">
+        {% if messages %}
+          {% for message in messages %}
+            <div class="{{ message.tags }}-message">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+      </div>
+
+
+      <form id="emailForm" method="POST" action="{% url 'send_reset_code' %}">
+        {% csrf_token %}
+        <div class="form-group">
+
+          <div class="form-group">
+            <label for="username_or_email">Email</label>
+            <input type="text" id="email" name="email" required spellcheck="false" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <button type="submit" class="btn-primary">Send Code (إرسال الرمز)</button>
+        </div>
+      </form>
+
+
+      <form id="codeForm" method="POST" action="{% url 'verify_reset_code' %}" style="display: none;">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="code">Verification Code (رمز التحقق)</label>
+          <input type="text" id="code" name="code" required />
+        </div>
+
+        <div class="form-group">
+          <label for="new_password">New Password (كلمة المرور الجديدة)</label>
+          <input type="password" id="new_password" name="new_password" required />
+        </div>
+
+
+        <input type="hidden" id="reset_email" name="email" />
+
+        <div class="show-password">
+          <input type="checkbox" id="show" />
+          <label for="show">Show Password (إظهار كلمة المرور)</label>
+        </div>
+
+        <div class="form-group">
+          <button type="submit" class="btn-primary">Reset Password (إعادة تعيين كلمة المرور)</button>
+        </div>
+      </form>
+
+      <p class="back-to-home" onclick="backToHome()">Back to Login</p>
+    </div>
+  </div>
+
+  <script>
+
+    document.getElementById('show').addEventListener('change', function () {
+      const passwordField = document.getElementById('new_password');
+      passwordField.type = this.checked ? 'text' : 'password';
+    });
+
+    function backToHome() {
+      window.location.href = "{% url 'login' %}";
+    }
+
+
+    document.getElementById('emailForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      fetch("{% url 'send_reset_code' %}", {
+        method: "POST",
+        headers: {
+          "X-CSRFToken": "{{ csrf_token }}"
+        },
+        body: new FormData(this)
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          document.getElementById('emailForm').style.display = 'none';
+          document.getElementById('codeForm').style.display = 'block';
+          document.getElementById('reset_email').value = document.getElementById('email').value;
+        } else {
+          alert(data.error || 'Error sending reset code.');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Something went wrong. Please try again later.');
+      });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const messages = document.querySelectorAll('#messages div');
+      if (messages.length > 0) {
+        setTimeout(() => {
+          messages.forEach(msg => {
+            msg.style.display = 'none';
+          });
+        }, 5000);
+      }
+    });
+  </script>
+</body>
+</html>

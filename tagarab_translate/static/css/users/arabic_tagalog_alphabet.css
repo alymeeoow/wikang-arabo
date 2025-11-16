@@ -1,0 +1,127 @@
+@import url("https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap");
+@import url(header.css);
+
+
+body {
+  font-family: "Lexend", sans-serif;
+  background-color: #ECECEC;
+  margin: 0;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+.alphabet-container {
+  margin: 20px auto;
+  max-width: 90%; 
+  padding: 10px;
+  text-align: center;
+  font-family: "Lexend", sans-serif;
+}
+
+.alphabet-container h2 {
+
+  font-size: 30px;
+  color: #333;
+}
+
+.alphabet-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr); 
+  gap: 15px;
+  justify-content: center;
+}
+
+.alphabet-tile {
+  background-color: #f8f9fa;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  padding: 25px;
+  font-size: 28px;
+  color: #333;
+  text-align: center;
+  cursor: pointer;
+  position: relative; 
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.alphabet-tile:hover {
+  background-color: #ddd;
+  transform: scale(1.1);
+}
+
+.alphabet-tile:active {
+  background-color: #bbb;
+  transform: scale(1);
+}
+
+
+.pronunciation {
+  font-size: 14px; 
+  color: #666;
+  margin-top: 10px;
+  position: absolute; 
+  bottom: 10px; 
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  pointer-events: none; 
+  font-style: italic;
+}
+
+.toggle-button {
+  display: inline-block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  font-weight: bold;
+  font-size: 16px;
+  background-color: #ffc000;
+  color: black;
+
+  border: 2px solid black;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .alphabet-grid {
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 10px;
+  }
+
+  .alphabet-tile {
+    padding: 20px; 
+    font-size: 24px; 
+  }
+
+  .pronunciation {
+    font-size: 12px; 
+  }
+
+  .alphabet-container h2 {
+    font-size: 26px; 
+  }
+}
+
+@media (max-width: 480px) {
+  .alphabet-grid {
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 8px;
+  }
+
+  .alphabet-tile {
+    padding: 15px; 
+    font-size: 20px;
+  }
+
+  .pronunciation {
+    font-size: 10px; /* Smallest font size for mobile */
+  }
+
+  .alphabet-container h2 {
+    font-size: 22px; 
+  }
+}

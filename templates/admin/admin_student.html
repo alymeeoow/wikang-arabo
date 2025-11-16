@@ -1,0 +1,217 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin User List</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'css/admin/admin_student.css' %}">
+  <link rel="icon" type="image/png" href="{% static 'images/TAlogo.png' %}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-datatables/1.8.3/vanilla-dataTables.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vanilla-datatables/1.8.3/vanilla-dataTables.min.css">
+</head>
+
+
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">Wikang Arabo</div>
+    <ul>
+      <li><a href="{% url 'admindashboard' %}"><i class="fas fa-home"></i> Dashboard</a></li>
+      <li><a href="{% url 'adminstudent' %}" class="active"><i class="fas fa-user-graduate"></i> Students</a></li>
+      <li><a href="{% url 'add_questions' %}" ><i class="fas fa-list"></i> Questions</a> </li>
+      <li><a href="{% url 'adminscore' %}"><i class="fas fa-chart-bar"></i> Scores</a></li>
+      <li><a href="{% url 'admin_logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+    </ul>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Header -->
+    <div class="header">
+      <div class="title">Student List</div>
+
+    </div>
+
+    <!-- Cards Section -->
+    <div class="cards">
+      <div class="card">
+        <h3>Total Registered</h3>
+        <p>{{ total_registered }}</p>
+      </div>
+      <div class="card">
+        <h3>Active Today</h3>
+        <p>{{ active_today }}</p>
+      </div>
+      <div class="card">
+        <h3>Newly Registered</h3>
+        <p>{{ newly_registered }}</p>
+      </div>
+      <div class="card">
+        <h3>Male Students</h3>
+        <p>{{ male_students }}</p>
+      </div>
+      <div class="card">
+        <h3>Female Students</h3>
+        <p>{{ female_students }}</p>
+      </div>
+      <div class="card">
+        <h3>No. of Translation Used</h3>
+        <p>{{ total_translations }}</p>
+      </div>
+    </div>
+
+    <!-- Filters Section -->
+
+
+
+    <!-- Users Table -->
+    <div class="table-container">
+      <div class="filter-container">
+        <div class="filter-group">
+          <label for="searchInput">Search</label>
+          <input type="text" id="searchInput" placeholder="Search by name..." onkeyup="filterTable()">
+        </div>
+        <div class="filter-group">
+          <label for="genderFilter">Gender</label>
+          <select id="genderFilter" onchange="filterTable()">
+            <option value="">All</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+          </select>
+        </div>
+        <div class="filter-group" style="display: none;">
+          <label for="nameSort">Sort by Name</label>
+          <select id="nameSort" onchange="sortByName()">
+            <option value="asc" selected>A to Z</option>
+            <option value="desc">Z to A</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="statusFilter">Status</label>
+          <select id="statusFilter" onchange="filterTable()">
+            <option value="">All</option>
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="dateFilter">Sort by Registration Date</label>
+          <select id="dateFilter" onchange="sortTable()">
+            <option value="latest">Latest</option>
+            <option value="oldest">Oldest</option>
+          </select>
+        </div>
+      </div>
+
+      <h2>Users</h2>
+      <table class="data-table" id="userTable">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Birthday</th>
+            <th>Address</th>
+            <th>Gender</th>
+            <th>Registration Date</th>
+            <th>Status</th>
+            <th> Arabic School Student</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in recent_users %}
+          <tr>
+            <td>{{ user.first_name }} {{ user.last_name }}</td>
+            <td>{{ user.formatted_birthday }}</td>
+            <td>{{ user.home_address }}</td>
+            <td>{{ user.gender|title }}</td>
+            <td>{{ user.user.date_joined|date:"F-d-Y" }}</td>
+            <td>{% if user.has_logged_in %}Active{% else %}Inactive{% endif %}</td>
+            <td>{{ user.is_student|yesno:"Yes,No" }}</td>
+
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <script>
+    function filterTable() {
+  const searchInput = document.getElementById('searchInput').value.toLowerCase();
+  const genderFilter = document.getElementById('genderFilter').value;
+  const statusFilter = document.getElementById('statusFilter').value;
+
+  const rows = document.querySelectorAll('#userTable tbody tr');
+
+  rows.forEach(row => {
+    const name = row.cells[0].textContent.toLowerCase();
+    const gender = row.cells[3].textContent;
+    const status = row.cells[5].textContent;
+
+    let matchesSearch = name.includes(searchInput);
+    let matchesGender = !genderFilter || gender === genderFilter;
+    let matchesStatus = !statusFilter || status === statusFilter;
+
+    // Log the conditions
+    console.log(name, gender, status, matchesSearch, matchesGender, matchesStatus);
+
+    if (matchesSearch && matchesGender && matchesStatus) {
+      row.style.display = '';
+    } else {
+      row.style.display = 'none';
+    }
+  });
+}
+
+    function sortTable() {
+    const table = document.getElementById('userTable');
+    const rows = Array.from(table.rows).slice(1);
+    const sortBy = document.getElementById('dateFilter').value;
+
+    rows.sort((rowA, rowB) => {
+        const dateA = new Date(rowA.cells[4].textContent.trim());
+        const dateB = new Date(rowB.cells[4].textContent.trim());
+
+        if (sortBy === 'latest') {
+            return dateB - dateA;
+        } else {
+            return dateA - dateB;
+        }
+    });
+
+
+    rows.forEach(row => table.tBodies[0].appendChild(row));
+}
+
+
+function sortByName() {
+  const table = document.querySelector(".data-table tbody");
+  const rows = Array.from(table.querySelectorAll("tr"));
+  const sortOrder = document.getElementById("nameSort").value;
+
+  rows.sort((a, b) => {
+    const nameA = a.cells[0]?.textContent.trim().toLowerCase();
+    const nameB = b.cells[0]?.textContent.trim().toLowerCase();
+
+    if (nameA < nameB) return sortOrder === "asc" ? -1 : 1;
+    if (nameA > nameB) return sortOrder === "asc" ? 1 : -1;
+    return 0;
+  });
+
+
+  rows.forEach(row => table.appendChild(row));
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("nameSort").value = "asc";
+  sortByName();
+});
+
+
+  </script>
+</body>
+</html>

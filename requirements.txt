@@ -1,0 +1,13 @@
+asgiref==3.8.1
+cmake==3.30.4
+distlib==0.3.8
+Django==5.1.1
+filelock==3.16.1
+ninja==1.11.1.1
+platformdirs==4.3.6
+sentencepiece==0.2.0
+setuptools==75.1.0
+sqlparse==0.5.1
+tzdata==2024.2
+virtualenv==20.26.6
+wheel==0.44.0

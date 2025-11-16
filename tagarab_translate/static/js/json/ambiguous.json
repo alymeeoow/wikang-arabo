@@ -1,0 +1,128 @@
+{
+    "tayo": [
+      { "english": "We/Us", "arabic": "نحن" },
+      { "english": "Stand", "arabic": "قيام" }
+    ],
+    "puno": [
+      { "english": "Tree", "arabic": "شجرة" },
+      { "english": "Full", "arabic": "ملأ" }
+    ],
+    "baka": [
+      { "english": "Cow", "arabic": "بقرة" },
+      { "english": "Maybe", "arabic": "فيضا" }
+    ],
+    "ayos": [
+      { "english": "Fix/Repair", "arabic": "أصلح" },
+      { "english": "Order/Neatness", "arabic": "نظيف" }
+    ],
+    "kita": [
+      { "english": "Income/Earnings", "arabic": "قضي" },
+      { "english": "See", "arabic": "بصر" }
+    ],
+    "baba": [
+      { "english": "Chin", "arabic": "ذقن" },
+      { "english": "Go down", "arabic": "سفل" }
+    ],
+    "bago": [
+      { "english": "New", "arabic": "جديد" },
+      { "english": "Before", "arabic": "قبل" }
+    ],
+    "bait": [
+      { "english": "Goodness/Kindness", "arabic": "مهذب" },
+      { "english": "Bait", "arabic": "طُعْم" }
+    ],
+    "baon": [
+      { "english": "Provisions", "arabic": "جيب" },
+      { "english": "Deeply buried", "arabic": "مفلس" }
+    ],
+    "basa": [
+      { "english": "Read", "arabic": "قراءة" },
+      { "english": "Wet", "arabic": "جاف" }
+    ],
+    "dating": [
+      { "english": "Previous", "arabic": "ماض" },
+      { "english": "Arriving", "arabic": "قدوم" }
+    ],
+    "huli": [
+      { "english": "Last", "arabic": "آخر" },
+      { "english": "Caught", "arabic": "قبض" }
+    ],
+    "burol": [
+      { "english": "Wake", "arabic": "ميّت" },
+      { "english": "Hill", "arabic": "جبل" }
+    ],
+    "bukas": [
+      { "english": "Tomorrow", "arabic": "غدا" },
+      { "english": "Open", "arabic": "مفتوح" }
+    ],
+    "sama": [
+      { "english": "Join", "arabic": "انضمام" },
+      { "english": "Badness", "arabic": "سوء" }
+    ],
+    "tala": [
+      { "english": "Star", "arabic": "نجم" },
+      { "english": "Record", "arabic": "قائمة" }
+    ],
+    "suso": [
+      { "english": "Breast", "arabic": "ثدي" },
+      { "english": "Snail", "arabic": "حلزون" }
+    ],
+    "tubo": [
+      { "english": "Pipe", "arabic": "ماسورة" },
+      { "english": "Grow", "arabic": "زراعة" },
+      { "english": "Sugarcane", "arabic": "قصب السكر" }
+    ],
+    "sala": [
+      { "english": "Living room", "arabic": "الغرفة الجلوس" },
+      { "english": "Mistake", "arabic": "خطأ" }
+    ],
+    "pasa": [
+      { "english": "Bruise", "arabic": "جرح" },
+      { "english": "Pass", "arabic": "نجاح" }
+    ],
+    "suka": [
+      { "english": "Vinegar", "arabic": "خلّ" },
+      { "english": "Vomit", "arabic": "قيء" }
+    ],
+    "hulog": [
+      { "english": "Drop/Fall", "arabic": "سقط" },
+      { "english": "Installment payment", "arabic": "قسط" }
+    ],
+    "lobo": [
+      { "english": "Balloon", "arabic": "بالون" },
+      { "english": "Wolf", "arabic": "ذئب" }
+    ],
+    "gamit": [
+      { "english": "Things/Items", "arabic": "آلة" },
+      { "english": "Use", "arabic": "استعمال" }
+    ],
+    "talon": [
+      { "english": "Jump", "arabic": "قفز" },
+      { "english": "Waterfall", "arabic": "شلّالة" }
+    ],
+    "buhay": [
+      { "english": "Life", "arabic": "حياة" },
+      { "english": "Alive", "arabic": "على قيد الحياة" }
+    ],
+    "panahon": [
+      { "english": "Time", "arabic": "وقت" },
+      { "english": "Weather", "arabic": "جوّ" }
+    ],
+    "galing": [
+      { "english": "From", "arabic": "من" },
+      { "english": "Excellence/Skill", "arabic": "متقن" }
+    ],
+    "tama": [
+      { "english": "Correct", "arabic": "صحيح" },
+      { "english": "Hit", "arabic": "ضرب" }
+    ],
+    "yaya": [
+      { "english": "Nanny", "arabic": "مربية" },
+      { "english": "Invite", "arabic": "دعوة" }
+    ],
+    "bunga": [
+      { "english": "Fruit", "arabic": "ثمر" },
+      { "english": "Result/Outcome", "arabic": "نتيجة" }
+    ]
+  }
+  

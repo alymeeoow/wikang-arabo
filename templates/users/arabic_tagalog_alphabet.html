@@ -1,0 +1,469 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arabic Alphabet</title>
+
+  <link rel="stylesheet" href="{% static 'css/users/arabic_tagalog_alphabet.css' %}">
+  <link rel="icon" type="image/png" href="{% static 'images/TAlogo.png' %}">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+</head>
+<body>
+
+
+
+
+   
+
+
+
+
+    {% include 'users/header_default.html' %}
+
+
+
+
+
+<div class="alphabet-container">
+  <h2 style="margin-top:50px;" >Arabic Alphabet</h2>
+  <button class="toggle-button" onclick="toggleAlphabet()">Switch to Filipino Alphabet</button>
+  <div class="alphabet-grid"  id="alphabet-grid">
+      <div class="alphabet-tile" onclick="handleClick('أ')">
+          <span class="arabic-letter">أ</span>
+          <span class="pronunciation">/alif/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('ب')">
+          <span class="arabic-letter">ب</span>
+          <span class="pronunciation">/bæ '/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('ت')">
+          <span class="arabic-letter">ت</span>
+          <span class="pronunciation">/tæ'/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('ث')">
+          <span class="arabic-letter">ث</span>
+          <span class="pronunciation">/thæ'/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('ج')">
+          <span class="arabic-letter">ج</span>
+          <span class="pronunciation">/djeem/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('ح')">
+          <span class="arabic-letter">ح</span>
+          <span class="pronunciation">/hæ'/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('خ')">
+          <span class="arabic-letter">خ</span>
+          <span class="pronunciation">/khae'/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('د')">
+          <span class="arabic-letter">د</span>
+          <span class="pronunciation">/dæl/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('ذ')">
+          <span class="arabic-letter">ذ</span>
+          <span class="pronunciation">/dhæl/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('ر')">
+          <span class="arabic-letter">ر</span>
+          <span class="pronunciation">/raa'/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('ز')">
+          <span class="arabic-letter">ز</span>
+          <span class="pronunciation">/zæ'/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('س')">
+          <span class="arabic-letter">س</span>
+          <span class="pronunciation">/seen/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('ش')">
+          <span class="arabic-letter">ش</span>
+          <span class="pronunciation">/sheen/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('ص')">
+          <span class="arabic-letter">ص</span>
+          <span class="pronunciation">/saad/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('ض')">
+          <span class="arabic-letter">ض</span>
+          <span class="pronunciation">/daad/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('ط')">
+          <span class="arabic-letter">ط</span>
+          <span class="pronunciation">/taa'/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('ظ')">
+          <span class="arabic-letter">ظ</span>
+          <span class="pronunciation">/dhaa'/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('ع')">
+          <span class="arabic-letter">ع</span>
+          <span class="pronunciation">/Aain/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('غ')">
+          <span class="arabic-letter">غ</span>
+          <span class="pronunciation">/ghain/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('ف')">
+          <span class="arabic-letter">ف</span>
+          <span class="pronunciation">/fæ'/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('ق')">
+          <span class="arabic-letter">ق</span>
+          <span class="pronunciation">/qaaf/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('ك')">
+          <span class="arabic-letter">ك</span>
+          <span class="pronunciation">/kæf/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('ل')">
+          <span class="arabic-letter">ل</span>
+          <span class="pronunciation">/læm/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('م')">
+          <span class="arabic-letter">م</span>
+          <span class="pronunciation">/meem/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('ن')">
+          <span class="arabic-letter">ن</span>
+          <span class="pronunciation">/noon/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('هـ')">
+        <span class="arabic-letter">هـ</span>
+        <span class="pronunciation">/hæ'/</span>
+    </div>
+      <div class="alphabet-tile" onclick="handleClick('و')">
+          <span class="arabic-letter">و</span>
+          <span class="pronunciation">/wæw/</span>
+      </div>
+
+      <div class="alphabet-tile" onclick="handleClick('ي')">
+          <span class="arabic-letter">ي</span>
+          <span class="pronunciation">/yae'/</span>
+      </div>
+  </div>
+</div>
+
+   <script>
+
+
+  const arabicAlphabet = `
+
+  <div class="alphabet-tile" onclick="handleClick('أ')">
+          <span class="arabic-letter">أ</span>
+          <span class="pronunciation">/alif/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('ب')">
+          <span class="arabic-letter">ب</span>
+          <span class="pronunciation">/bæ '/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('ت')">
+          <span class="arabic-letter">ت</span>
+          <span class="pronunciation">/tæ'/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('ث')">
+          <span class="arabic-letter">ث</span>
+          <span class="pronunciation">/thæ'/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('ج')">
+          <span class="arabic-letter">ج</span>
+          <span class="pronunciation">/djeem/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('ح')">
+          <span class="arabic-letter">ح</span>
+          <span class="pronunciation">/hæ'/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('خ')">
+          <span class="arabic-letter">خ</span>
+          <span class="pronunciation">/khae'/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('د')">
+          <span class="arabic-letter">د</span>
+          <span class="pronunciation">/dæl/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('ذ')">
+          <span class="arabic-letter">ذ</span>
+          <span class="pronunciation">/dhæl/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('ر')">
+          <span class="arabic-letter">ر</span>
+          <span class="pronunciation">/raa'/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('ز')">
+          <span class="arabic-letter">ز</span>
+          <span class="pronunciation">/zæ'/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('س')">
+          <span class="arabic-letter">س</span>
+          <span class="pronunciation">/seen/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('ش')">
+          <span class="arabic-letter">ش</span>
+          <span class="pronunciation">/sheen/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('ص')">
+          <span class="arabic-letter">ص</span>
+          <span class="pronunciation">/saad/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('ض')">
+          <span class="arabic-letter">ض</span>
+          <span class="pronunciation">/daad/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('ط')">
+          <span class="arabic-letter">ط</span>
+          <span class="pronunciation">/taa'/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('ظ')">
+          <span class="arabic-letter">ظ</span>
+          <span class="pronunciation">/dhaa'/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('ع')">
+          <span class="arabic-letter">ع</span>
+          <span class="pronunciation">/Aain/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('غ')">
+          <span class="arabic-letter">غ</span>
+          <span class="pronunciation">/ghain/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('ف')">
+          <span class="arabic-letter">ف</span>
+          <span class="pronunciation">/fæ'/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('ق')">
+          <span class="arabic-letter">ق</span>
+          <span class="pronunciation">/qaaf/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('ك')">
+          <span class="arabic-letter">ك</span>
+          <span class="pronunciation">/kæf/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('ل')">
+          <span class="arabic-letter">ل</span>
+          <span class="pronunciation">/læm/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('م')">
+          <span class="arabic-letter">م</span>
+          <span class="pronunciation">/meem/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('ن')">
+          <span class="arabic-letter">ن</span>
+          <span class="pronunciation">/noon/</span>
+      </div>
+      <div class="alphabet-tile" onclick="handleClick('هـ')">
+        <span class="arabic-letter">هـ</span>
+        <span class="pronunciation">/hæ'/</span>
+    </div>
+      <div class="alphabet-tile" onclick="handleClick('و')">
+          <span class="arabic-letter">و</span>
+          <span class="pronunciation">/wæw/</span>
+      </div>
+
+      <div class="alphabet-tile" onclick="handleClick('ي')">
+          <span class="arabic-letter">ي</span>
+          <span class="pronunciation">/yae'/</span>
+      </div>
+
+
+  `;
+
+  const filipinoAlphabet = `
+  <div class="alphabet-tile" onclick="handleFilipinoAudio( '{% static 'recordings/Filipino/A.mp3' %}')">
+      <span class="arabic-letter">A</span>
+      <span class="pronunciation">/ah/</span>
+  </div>
+
+  <div class="alphabet-tile" onclick="handleFilipinoAudio( '{% static 'recordings/Filipino/B.mp3' %}')">
+      <span class="arabic-letter">B</span>
+      <span class="pronunciation">/ba/</span>
+  </div>
+  <div class="alphabet-tile" onclick="handleFilipinoAudio( '{% static 'recordings/Filipino/C.mp3' %}')">
+      <span class="arabic-letter">C</span>
+      <span class="pronunciation">/ka/</span>
+  </div>
+  <div class="alphabet-tile" onclick="handleFilipinoAudio( '{% static 'recordings/Filipino/D.mp3' %}')">
+      <span class="arabic-letter">D</span>
+      <span class="pronunciation">/da/</span>
+  </div>
+  <div class="alphabet-tile" onclick="handleFilipinoAudio( '{% static 'recordings/Filipino/E.mp3' %}')">
+      <span class="arabic-letter">E</span>
+      <span class="pronunciation">/eh/</span>
+  </div>
+  <div class="alphabet-tile" onclick="handleFilipinoAudio( '{% static 'recordings/Filipino/F.mp3' %}')">
+      <span class="arabic-letter">F</span>
+      <span class="pronunciation">/fa/</span>
+  </div>
+  <div class="alphabet-tile" onclick="handleFilipinoAudio( '{% static 'recordings/Filipino/G.mp3' %}')">
+      <span class="arabic-letter">G</span>
+      <span class="pronunciation">/ga/</span>
+  </div>
+  <div class="alphabet-tile" onclick="handleFilipinoAudio( '{% static 'recordings/Filipino/H.mp3' %}')">
+      <span class="arabic-letter">H</span>
+      <span class="pronunciation">/ha/</span>
+  </div>
+  <div class="alphabet-tile" onclick="handleFilipinoAudio( '{% static 'recordings/Filipino/I.mp3' %}')">
+      <span class="arabic-letter">I</span>
+      <span class="pronunciation">/ee/</span>
+  </div>
+  <div class="alphabet-tile" onclick="handleFilipinoAudio( '{% static 'recordings/Filipino/J.mp3' %}')">
+      <span class="arabic-letter">J</span>
+      <span class="pronunciation">/ja/</span>
+  </div>
+  <div class="alphabet-tile" onclick="handleFilipinoAudio( '{% static 'recordings/Filipino/K.mp3' %}')">
+      <span class="arabic-letter">K</span>
+      <span class="pronunciation">/ka/</span>
+  </div>
+  <div class="alphabet-tile" onclick="handleFilipinoAudio( '{% static 'recordings/Filipino/L.mp3' %}')">
+      <span class="arabic-letter">L</span>
+      <span class="pronunciation">/la/</span>
+  </div>
+  <div class="alphabet-tile" onclick="handleFilipinoAudio( '{% static 'recordings/Filipino/M.mp3' %}')">
+      <span class="arabic-letter">M</span>
+      <span class="pronunciation">/ma/</span>
+  </div>
+
+  <div class="alphabet-tile" onclick="handleFilipinoAudio( '{% static 'recordings/Filipino/N.mp3' %}')">
+
+      <span class="arabic-letter">N</span>
+      <span class="pronunciation">/na/</span>
+  </div>
+  <div class="alphabet-tile" onclick="handleFilipinoAudio( '{% static 'recordings/Filipino/Ñ.mp3' %}')">
+      <span class="arabic-letter">Ñ</span>
+      <span class="pronunciation">/nye/</span>
+  </div>
+  <div class="alphabet-tile" onclick="handleFilipinoAudio( '{% static 'recordings/Filipino/Ng.mp3' %}')">
+      <span class="arabic-letter">Ng</span>
+      <span class="pronunciation">/nga/</span>
+  </div>
+  <div class="alphabet-tile" onclick="handleFilipinoAudio( '{% static 'recordings/Filipino/O.mp3' %}')">
+      <span class="arabic-letter">O</span>
+      <span class="pronunciation">/oh/</span>
+  </div>
+  <div class="alphabet-tile" onclick="handleFilipinoAudio( '{% static 'recordings/Filipino/P.mp3' %}')">
+      <span class="arabic-letter">P</span>
+      <span class="pronunciation">/pa/</span>
+  </div>
+  <div class="alphabet-tile" onclick="handleFilipinoAudio( '{% static 'recordings/Filipino/Q.mp3' %}')">
+      <span class="arabic-letter">Q</span>
+      <span class="pronunciation">/kwa/</span>
+  </div>
+  <div class="alphabet-tile" onclick="handleFilipinoAudio( '{% static 'recordings/Filipino/R.mp3' %}')">
+      <span class="arabic-letter">R</span>
+      <span class="pronunciation">/ra/</span>
+  </div>
+  <div class="alphabet-tile" onclick="handleFilipinoAudio( '{% static 'recordings/Filipino/S.mp3' %}')">
+      <span class="arabic-letter">S</span>
+      <span class="pronunciation">/sa/</span>
+  </div>
+  <div class="alphabet-tile" onclick="handleFilipinoAudio( '{% static 'recordings/Filipino/T.mp3' %}')">
+      <span class="arabic-letter">T</span>
+      <span class="pronunciation">/ta/</span>
+  </div>
+
+  <div class="alphabet-tile" onclick="handleFilipinoAudio( '{% static 'recordings/Filipino/U.mp3' %}')">
+      <span class="arabic-letter">U</span>
+      <span class="pronunciation">/oo/</span>
+  </div>
+  <div class="alphabet-tile" onclick="handleFilipinoAudio( '{% static 'recordings/Filipino/V.mp3' %}')">
+      <span class="arabic-letter">V</span>
+      <span class="pronunciation">/va/</span>
+  </div>
+  <div class="alphabet-tile" onclick="handleFilipinoAudio( '{% static 'recordings/Filipino/W.mp3' %}')">
+      <span class="arabic-letter">W</span>
+      <span class="pronunciation">/wa/</span>
+  </div>
+  <div class="alphabet-tile" onclick="handleFilipinoAudio( '{% static 'recordings/Filipino/X.mp3' %}')">
+      <span class="arabic-letter">X</span>
+      <span class="pronunciation">/kss/</span>
+  </div>
+  <div class="alphabet-tile" onclick="handleFilipinoAudio( '{% static 'recordings/Filipino/Y.mp3' %}')">
+      <span class="arabic-letter">Y</span>
+      <span class="pronunciation">/ya/</span>
+  </div>
+  <div class="alphabet-tile" onclick="handleFilipinoAudio( '{% static 'recordings/Filipino/Z.mp3' %}')">
+      <span class="arabic-letter">Z</span>
+      <span class="pronunciation">/za/</span>
+  </div>
+`;
+
+
+
+
+let currentAlphabet = 'arabic';
+
+function handleClick(letter, pronunciation = null) {
+    let voice;
+    if (currentAlphabet === 'arabic') {
+        voice = "Arabic Male";
+    } else {
+        voice = responsiveVoice.getVoices().find(v => v.name === "Tagalog") ? "Tagalog" : "UK English Female";
+    }
+    const toPronounce = pronunciation || letter;
+    responsiveVoice.speak(toPronounce, voice);
+}
+
+function handleFilipinoAudio(audioPath) {
+    if (audioPath) {
+        const audio = new Audio(audioPath);
+        audio.play();
+    } else {
+        console.error("No audio path provided!");
+    }
+}
+
+function toggleAlphabet() {
+    const grid = document.getElementById("alphabet-grid");
+    const title = document.querySelector("h2");
+    const button = document.querySelector(".toggle-button");
+
+    if (currentAlphabet === 'arabic') {
+
+        grid.innerHTML = filipinoAlphabet;
+        title.textContent = "Filipino Alphabet";
+        button.textContent = "Switch to Arabic Alphabet";
+        currentAlphabet = 'filipino';
+    } else {
+
+        grid.innerHTML = arabicAlphabet;
+        title.textContent = "Arabic Alphabet";
+        button.textContent = "Switch to Filipino Alphabet";
+        currentAlphabet = 'arabic';
+    }
+}
+
+
+
+
+
+</script>
+
+
+
+
+
+
+<script>
+  const WORD_DICTIONARY_URL = "{% static 'js/json/words_dictionary.json' %}";
+
+
+  function toggleNav() {
+  const navbar = document.getElementById('navbar');
+  navbar.classList.toggle('show');
+}
+
+</script>
+
+
+<script src="{% static 'js/users/dictionary.js'%}"></script>
+<script src="https://code.responsivevoice.org/responsivevoice.js?key=3H4F782F"></script>
+
+
+
+
+
+</body>
+</html>

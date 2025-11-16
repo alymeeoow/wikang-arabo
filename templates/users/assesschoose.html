@@ -1,0 +1,66 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assessment</title>
+  <link rel="stylesheet" href="{% static 'css/users/assesschoose.css' %}">
+  <link rel="icon" type="image/png" href="{% static 'images/TAlogo.png' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  
+
+
+</head>
+<body>
+
+  
+  {% include 'users/header_default.html' %}
+
+
+
+  
+  <div class="container">
+    <h1 class="heading">Choose what Language of Test you want to take</h1>
+    <div class="book">
+      <div class="option" onclick="showConfirmationModal('Tagalog')">
+        <span class="option-text">Assessment A</span>
+        <p>TAGALOG</p>
+      </div>
+      <div class="option" onclick="showConfirmationModal('Arabic')">
+        <span class="option-text">Assessment B</span>
+         <p>العربية</p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal -->
+  <div id="confirmationModal" class="modal">
+    <div class="modal-content">
+      <p id="modalText">Are you sure you want to take this assessment?</p>
+      <div class="modal-buttons">
+        <button onclick="confirmAssessment()">Yes</button>
+        <button onclick="closeModal()">No</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="{% static 'js/users/assesschoose.js'%}"></script>
+  <script>
+    function confirmAssessment() {
+      if (selectedAssessment === 'Tagalog') {
+        window.location.href = "{% url 'assessment_tagalog'%}"; 
+      } else if (selectedAssessment === 'Arabic') {
+        window.location.href = "{% url 'assessment_arabic'%}"; 
+      }
+    }
+
+
+    function toggleNav() {
+  const navbar = document.getElementById('navbar');
+  navbar.classList.toggle('show'); 
+}
+    
+  </script>
+</body>

@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assessment Results</title>
+  <link rel="stylesheet" href="{% static 'css/users/assessment_tagalog.css' %}">
+  <link rel="icon" type="image/png" href="{% static 'images/TAlogo.png' %}">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+<div class="header">
+  <img style="height: 50px" src="{% static 'images/TAlogo.png' %}" class="logo">
+  <div class="navbar">
+    <a href="{% url 'translate' %}" data-url="{% url 'translate' %}" >Translate</a>
+    <a href="{% url 'dictionary' %}" data-url="{% url 'dictionary' %}" >Dictionary</a>
+    <a href="{% url 'profile' %}" data-url="{% url 'profile' %}" >Profile</a>
+  </div>
+  <form id="logoutForm" action="{% url 'logout' %}" method="post" style="display: inline">
+    {% csrf_token %}
+    <i style="margin-right: 50px; cursor: pointer;" class="fas fa-sign-out-alt" title="Logout" ></i>
+  </form>
+</div>
+
+<div style="margin-top: 200px;" class="container">
+  <h2 class="result-header">Assessment Results</h2>
+  <div class="results-container">
+    <p><strong>Type of Test:</strong> {{ test_type }}</p>
+    <p><strong>Score:</strong> {{ score }} out of {{ total_questions }}</p>
+    <p><strong>Percentage:</strong> {{ percentage }}%</p>
+    <div class="button-container">
+      <a href="{% url 'assesschoose' %}" class="retry-button">Retry Assessment</a>
+      <a href="{% url 'profile' %}" class="profile-button">View Profile</a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .container {
+    text-align: center;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: white;
+    width: 50%;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  .result-header {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  .results-container p {
+    font-size: 18px;
+    margin: 10px 0;
+  }
+  .button-container {
+    margin-top: 20px;
+  }
+  .retry-button, .profile-button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px;
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    background-color: #FFC000;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+  }
+  .retry-button:hover, .profile-button:hover {
+    background-color: #FFB000;
+  }
+  @media (max-width: 768px) {
+    .container {
+      width: 90%;
+    }
+    .result-header {
+      font-size: 20px;
+    }
+    .results-container p {
+      font-size: 16px;
+    }
+    .retry-button, .profile-button {
+      padding: 8px 15px;
+      font-size: 14px;
+    }
+  }
+</style>
+
+<script src="{% static 'js/users/assessment_tagalog.js'%}"></script>
+<script src="https://code.responsivevoice.org/responsivevoice.js?key=3H4F782F"></script>
+
+</body>
+</html>

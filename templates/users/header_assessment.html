@@ -1,0 +1,24 @@
+{% load static %}
+<div class="header">
+  <!-- Logo -->
+  <img src="{% static 'images/TAlogo.png' %}" class="logo" alt="Logo" />
+
+  <!-- Navbar -->
+  <div class="navbar" id="navbar">
+    <a href="{% url 'translate' %}" data-url="{% url 'translate' %}" onclick="return confirmNavigation(event)">Translate</a>
+    <a href="{% url 'arabic_alphabet' %}" data-url="{% url 'arabic_alphabet' %}" onclick="return confirmNavigation(event)">Alphabet</a>
+    <a class="active" href="{% url 'assesschoose' %}" data-url="{% url 'assesschoose' %}" onclick="return confirmNavigation(event)">Assessment</a>
+    <a href="{% url 'dictionary' %}" data-url="{% url 'dictionary' %}" onclick="return confirmNavigation(event)">Dictionary</a>
+    <a href="{% url 'profile' %}" data-url="{% url 'profile' %}" onclick="return confirmNavigation(event)">Profile</a>
+
+    <form id="logoutForm" action="{% url 'logout' %}" method="post">
+      {% csrf_token %}
+      <button type="submit" class="logout-btn">
+        <i style="margin-right: 50px; cursor: pointer;" class="fas fa-sign-out-alt" title="Logout" onclick="confirmLogout(event)"></i>
+      </button>
+    </form>
+  </div>
+
+  <!-- Burger Menu -->
+  <button class="burger-menu" id="burgerMenu" onclick="toggleNav()">☰</button>
+</div>

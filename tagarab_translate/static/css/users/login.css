@@ -1,0 +1,217 @@
+@import url("https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.language-toggle {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.btn-language {
+  background-color: #f8f9fa;
+  color: #333;
+  border: 1px solid #ddd;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.btn-language:hover {
+  background-color: #e9ecef;
+}
+
+/* RTL support */
+[dir="rtl"] .language-toggle {
+  left: 20px;
+  right: auto;
+}
+
+[dir="rtl"] .action-links {
+  text-align: left;
+}
+
+[dir="rtl"] .show-password {
+  text-align: right;
+}
+
+body {
+  font-family: "Lexend", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-image: url('../../images/hero.png');
+  background-size: cover;
+  background-position: center;
+  color: #333;
+}
+
+/* Container for the login box */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.login-box {
+  background-color: white;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 90%;
+}
+
+
+.login-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.logo {
+  width: 80px;
+  margin-bottom: 15px;
+}
+
+h1 {
+  font-size: 28px;
+  color: black;
+}
+
+.subtitle {
+  font-size: 16px;
+  color: #666;
+  margin-top: 5px;
+}
+
+/* Error Messages */
+.error-message {
+  background-color: #ffdddd;
+  padding: 10px;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+  margin-bottom: 20px;
+  border-radius: 5px;
+}
+
+/* General message container */
+.message-container {
+  margin: 15px 0;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.error-text {
+  font-size: 14px;
+}
+
+
+.success-message {
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  color: #155724;
+}
+
+
+
+/* Form Group */
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+  display: block;
+  margin-bottom: 5px;
+}
+
+input[type='text'],
+input[type='password'] {
+  font-family: "Lexend", sans-serif;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+input[type='text']:focus,
+input[type='password']:focus {
+  outline: none;
+  border-color: black;
+}
+
+
+.show-password {
+  display: flex;
+  align-items: center;
+}
+
+.show-password input {
+  margin-right: 10px;
+}
+
+
+.btn-primary {
+  margin-top: 10px;
+  background-color: #ffc000;
+  color: black;
+  border: none;
+  padding: 12px;
+  width: 100%;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#show{
+
+  margin-bottom: 6px;
+}
+
+.btn-primary:hover {
+  background-color: #ffc000;
+}
+
+
+.action-links {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.action-links p {
+  font-size: 14px;
+  cursor: pointer;
+  color: #333;
+}
+
+.action-links p:hover {
+  text-decoration: underline;
+}
+
+
+.back-to-home {
+  text-align: center;
+  color: black;
+  font-weight: bold;
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+

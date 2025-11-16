@@ -1,0 +1,73 @@
+{%load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WIKANG ARABO</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+    
+    <link rel="stylesheet" href="{% static 'css/index/index.css' %}">
+  <link rel="icon" type="image/png" href="{% static 'images/TAlogo.png' %}">
+  </head>
+  <body>
+  
+    <div class="landing-container">
+   
+      <header class="landing-header">
+        <div class="logo-container">
+          <img src="{% static 'images/TAlogo.png' %}" alt="WIKANG ARABO Logo" class="logo" />
+        </div>
+        <nav class="navbar">
+          <a href="#features">Features</a>
+          <a href="#about">About</a>
+          
+          <a href="{% url 'login' %}" class="btn-primary">Get Started</a>
+        </nav>
+      </header>
+
+  
+      <section class="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <h1>WIKANG ARABO</h1>
+          <p class="tagline">Bridging Languages, Connecting Cultures</p>
+          <a href="{% url 'login' %}" class="btn-primary">Start Translating</a>
+        </div>
+      </section>
+
+
+      <section class="features" id="features">
+        <h2>Why Choose WIKANG ARABO?</h2>
+        <div class="features-list">
+          <div class="feature-item">
+            <h3>Real-Time Translation</h3>
+            <p>Translate text instantly between Tagalog , Arabic  and English.</p>
+          </div>
+          <div class="feature-item">
+            <h3>Voice Recognition</h3>
+            <p>Speak directly into the app and have your words translated seamlessly.</p>
+          </div>
+        
+          <div class="feature-item">
+            <h3>Assessment</h3>
+            <p>Test your knowledge and see how much you've learned with built-in assessments.</p>
+          </div>
+          
+        </div>
+      </section>
+
+   
+      <section class="about" id="about">
+        <h2>About Us</h2>
+        <p>
+          WIKANG ARABO is an advanced translation web app that connects the Filipino and Arabic languages. Our mission is to break down language barriers and build stronger cultural understanding between Tagalog and Arabic speakers.
+        </p>
+      </section>
+
+ 
+     
+    </div>
+  </body>
+</html>

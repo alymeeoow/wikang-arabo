@@ -1,0 +1,138 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TAG-ARAB Details</title>
+
+    <link rel="stylesheet" href="{% static 'css/users/details.css' %}" />
+    <link rel="icon" type="image/png" href="{% static 'images/TAlogo.png' %}" />
+  </head>
+
+  <body>
+ 
+    <div class="hero">
+      <div class="hero-overlay"></div>
+
+      <!-- Details Form Container -->
+      <div class="login-box">
+
+
+        <img src="{% static 'images/TAlogo.png' %}" alt="WIKANG ARABO Logo" class="logo" />
+        
+        
+    
+        
+
+        <h1 class="tonone">DETAILS (تفاصيل)</h1>
+
+        <!-- Error Message Handling -->
+        <div id="errorMessage" class="error-message" style="display: none;">
+          {% for message in messages %}
+          <p class="error-text">{{ message }}{% if not forloop.last %}<br />{% endif %}</p>
+          {% endfor %}
+        </div>
+
+        <!-- Details Form -->
+        <form method="post" action="{% url 'details' %}">
+          {% csrf_token %}
+          <div class="input-group">
+            <label for="first_name">First Name </label>
+            <input type="text" id="first_name" name="first_name" required spellcheck="false" />
+          </div>
+
+          <div class="input-group">
+            <label for="middle_name">Middle Name </label>
+            <input type="text" id="middle_name" name="middle_name" required spellcheck="false" />
+          </div>
+
+          <div class="input-group">
+            <label for="last_name">Last Name </label>
+            <input type="text" id="last_name" name="last_name" required spellcheck="false" />
+          </div>
+
+          <div class="input-group">
+            <label for="home_address">Home Address</label>
+            <input type="text" id="home_address" name="home_address" required spellcheck="false" />
+          </div>
+
+          <div class="input-group">
+            <label for="birthdate">Birthdate </label>
+            <select id="birth_day" name="birth_day" required>
+              <option value="">Day </option>
+            </select>
+            <select id="birth_month" name="birth_month" required>
+              <option value="">Month </option>
+            </select>
+            <select id="birth_year" name="birth_year" required>
+              <option value="">Year</option>
+            </select>
+          </div>
+
+          <div class="input-group">
+            <label for="gender">Gender</label>
+            <select id="gender" name="gender" required>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div class="input-group">
+            <label for="is_student">Student of Arabic School? </label>
+            <select id="is_student" name="is_student" required>
+              <option value="yes">Yes</option>
+              <option selected value="no">No</option>
+            </select>
+          </div>
+          
+
+    
+          <button id="submit" type="submit" class="btn-primary">SUBMIT </button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      const birthDaySelect = document.getElementById('birth_day');
+      for (let i = 1; i <= 31; i++) {
+        const option = document.createElement('option');
+        option.value = i;
+        option.textContent = i;
+        birthDaySelect.appendChild(option);
+      }
+
+      const birthMonthSelect = document.getElementById('birth_month');
+      const monthNames = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+      ];
+      monthNames.forEach((month, index) => {
+        const option = document.createElement('option');
+        option.value = index + 1;
+        option.textContent = month;
+        birthMonthSelect.appendChild(option);
+      });
+
+      const birthYearSelect = document.getElementById('birth_year');
+      const currentYear = new Date().getFullYear();
+      for (let i = currentYear; i >= 1900; i--) {
+        const option = document.createElement('option');
+        option.value = i;
+        option.textContent = i;
+        birthYearSelect.appendChild(option);
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,106 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TAG-ARAB Login</title>
+
+    <!-- Link to CSS -->
+    <link rel="stylesheet" href="{% static 'css/users/login.css' %}" />
+    
+    <link rel="icon" type="image/png" href="{% static 'images/TAlogo.png' %}" />
+  </head>
+
+  <body>
+    <div class="login-container">
+      <div class="login-box">
+        <!-- Logo and Title -->
+        <div class="login-header">
+            <img src="{% static 'images/TAlogo.png' %}" alt="WIKANG ARABO Logo" class="logo" />
+            <h1>WIKANG ARABO</h1>
+            <p class="subtitle">Administrator Login Portal</p>
+          </div>
+        <div id="successMessage" class="message-container success-message" style="display: none;">
+          {% for message in messages %}
+          {% if message.tags == 'success' %}
+          <p class="message-text">{{ message }}</p>
+          {% endif %}
+          {% endfor %}
+        </div>
+
+      
+        <div id="errorMessage" class="error-message" style="display: none;">
+          {% for message in messages %}
+          {% if message.tags == 'error' %}
+          <p class="message-text">{{ message }}</p>
+          {% endif %}
+          {% endfor %}
+        </div>
+      
+
+ 
+        <form id="loginForm" method="POST" action="">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="username_or_email">Username or Email</label>
+            <input type="text" id="username_or_email" name="username_or_email" required spellcheck="false" />
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required />
+          </div>
+
+          <div class="show-password">
+            <input type="checkbox" id="show" />
+            <label for="show">Show Password</label>
+          </div>
+
+      
+          <div class="form-group">
+            <button id="submit" type="submit" class="btn-primary">Login</button>
+          </div>
+        </form>
+
+    
+        
+
+      
+  
+      </div>
+    </div>
+
+ 
+    <script>
+     
+      document.getElementById('show').addEventListener('change', function () {
+        const passwordField = document.getElementById('password');
+        passwordField.type = this.checked ? 'text' : 'password';
+      });
+
+    
+      function redirect2() {
+        window.location.href = "{% url 'signup' %}";
+      }
+
+   
+      function backToHome() {
+        window.location.href = "{% url 'index' %}";
+      }
+
+       document.addEventListener('DOMContentLoaded', function () {
+        const successMessages = document.querySelectorAll('.success-message .message-text');
+        const errorMessages = document.querySelectorAll('.error-message .message-text');
+
+        if (successMessages.length > 0) {
+          document.getElementById('successMessage').style.display = 'block';
+        }
+
+        if (errorMessages.length > 0) {
+          document.getElementById('errorMessage').style.display = 'block';
+        }
+      });
+    </script>
+  </body>
+</html>

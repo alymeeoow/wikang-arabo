@@ -1,0 +1,233 @@
+@import url("https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap");
+@import url(header.css);
+
+body {
+  font-family: "Lexend", sans-serif;
+  background-color: #ECECEC;
+  margin: 0;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+
+.container {
+  margin: 70px auto;
+  padding: 20px;
+  background-color: white;
+  width: 50%;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+.switch-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+#languageSwitch {
+  width: 50px;
+  height: 25px;
+  position: relative;
+  appearance: none;
+  background-color: #ccc;
+  border-radius: 25px;
+  transition: background-color 0.3s ease;
+}
+
+#languageSwitch:checked {
+  background-color: #4caf50;
+}
+
+#languageSwitch:before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  background-color: white;
+  transition: transform 0.3s ease;
+}
+
+#languageSwitch:checked:before {
+  transform: translateX(25px);
+}
+
+
+.word-of-the-day {
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f0f0f0;
+}
+
+.word-of-the-day h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.word-of-the-day p {
+  margin: 5px 0 0;
+  color: #333;
+}
+
+.search-container {
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap; 
+  justify-content: center;
+  align-items: center;
+  gap: 10px; 
+}
+
+.search-container input[type=text] {
+  padding: 10px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  outline: none;
+  max-width: 55vh; 
+ 
+}
+
+.search-container button {
+  padding: 10px 20px;
+  background-color: #FFC000;
+  border: 2px solid black;
+  border-radius: 5px;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 16px;
+  flex: 1 0 auto; 
+  max-width: 120px; 
+}
+
+.search-container button:hover {
+  background-color: #FFB000;
+}
+
+.results {
+  text-align: left;
+}
+
+.result-item {
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.result-item h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.result-item p {
+  margin: 5px 0 0;
+  color: #666;
+}
+
+.arabic-equivalent {
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f0f0f0;
+  display: none;
+}
+
+.arabic-equivalent h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.arabic-equivalent p {
+  margin: 5px 0 0;
+  color: #333;
+}
+
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 3;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 20% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 400px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+  padding: 10px 15px;
+  border-bottom: 1px solid #ddd;
+  background-color: #f4f4f9;
+  color: black;
+  border-radius: 10px 10px 0 0;
+}
+
+.modal-header h2 {
+  margin: 0;
+}
+
+.modal-header .close {
+  margin-top: -200px;
+  float: right;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Adjustments for smaller screens */
+@media (max-width: 768px) {
+  .container {
+      width: 90%;
+      margin: 90px auto;
+      padding: 15px;
+  }
+
+  .search-container input[type=text] {
+    max-width: 55vh;
+      width: 100%;
+  }
+
+  .search-container button {
+      width: 100%; 
+      max-width: none; 
+      margin: 0; 
+  }
+
+  .word-of-the-day h2 {
+      font-size: 18px; /* Adjust font size */
+  }
+
+  .results {
+      text-align: center; /* Center align for better view */
+  }
+}
+
+
+
+
+

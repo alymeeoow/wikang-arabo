@@ -1,0 +1,558 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WIKANG ARABO</title>
+    <link rel="stylesheet" href="{% static 'css/users/translate.css' %}" />
+    <link rel="icon" type="image/png" href="{% static 'images/TAlogo.png' %}" />
+    <link rel="manifest" href="manifest.json" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+
+    <!-- Include Intro.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intro.js/minified/introjs.min.css" />
+
+
+  </head>
+
+
+
+
+
+  <body>
+    <!-- Header with navigation bar and logout -->
+    <div id="tutorial-data" data-show-tutorial="{{ request.session.show_tutorial|default:"false"|lower }}"></div>
+    {% include 'users/header_translate.html' %}
+
+    <!-- Sidebar for Translation History -->
+    <div class="sidebar" id="sidebar" data-step="2" data-intro="This is your Translation History. It will show your past translations.">
+
+      <div id="loadingSpinner" style="display: none; text-align: center; padding: 10px;">
+
+    </div>
+      <h2 style="margin-top: 5vh;">Translation History</h2>
+      <div id="history"></div>
+    </div>
+
+    <!-- Main container for translation input and output -->
+    <div class="container" id="container">
+
+      <!-- Question Mark Icon to Trigger the Tutorial -->
+<div class="tutorial-trigger" onclick="startTutorial()" title="Show Tutorial">
+  <i class="fas fa-question-circle"></i>
+</div>
+
+
+      <!-- Translation Mode Selector -->
+      <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
+
+      <div class="controls1" id="controls1" data-step="3" data-intro="This is the Translation Mode selector. Choose whether to translate from Tagalog to Arabic or Arabic to Tagalog.">
+        <label style="margin-top: 15px;" for="translationMode">Translation Mode:</label>
+        <select id="translationMode" onchange="updateMode()">
+          <option value="tl-ar">Tagalog to العربية</option>
+          <option value="ar-tl">العربية to Tagalog</option>
+        </select>
+      </div>
+
+
+      <div class="modal" id="speakModal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 id="modalTitle">Voice Translation</h2>
+            <span
+              class="close "  id="speakModalClose"
+              onclick="closeSpeakModal()"
+            >&times;</span>
+          </div>
+          <div class="modal-body" id="speakModalBody">
+            <!-- speak modal prompt is in the javascript-->
+          </div>
+        </div>
+      </div>
+
+      <!-- Input Box for Text to Translate -->
+      <div class="translate-box" data-step="4" data-intro="Enter the text you want to translate in this box.">
+        <textarea
+          id="inputText"
+          placeholder="Enter text or click Speak"
+        ></textarea>
+
+        <!-- Buttons for Translate and Speak -->
+        <div class="mybuttons" data-step="5" data-intro="Click 'Translate' to translate the entered text, or 'Speak' to use voice input.">
+          <button class="btn" onclick="translateText()">Translate</button>
+          <button class="btn" onclick="startSpeechRecognitionModal()">Speak</button>
+        </div>
+      </div>
+
+      <!-- Output Box for Translated Text -->
+      <div class="translate-box" data-step="6" data-intro="This box will display the translation of the text you entered.">
+        <textarea
+          id="outputText"
+          placeholder="Translation will appear here"
+          readonly
+        ></textarea>
+
+
+        <div class="mybuttons" data-step="7" data-intro="Click 'Read Aloud' to hear the translated text spoken out loud.">
+          <button class="btn" onclick="speakText('outputText', 'targetLang', 'volumeControl1')">
+            Read Aloud
+          </button>
+        </div>
+
+
+        <input style="display: none;"
+          type="range"
+          id="volumeControl1"
+          class="volume-control"
+          min="0"
+          max="1"
+          step="0.1"
+          value="1"
+          onchange="syncVolume('volumeControl1', 'volumeControl2')"
+
+        />
+      </div>
+
+      <div class="translate-box" data-step="9" data-intro="This box will show the English translations of the source language.">
+        <textarea
+          id="outputText2"
+          placeholder="English Translation will Appear here"
+          readonly
+        ></textarea>
+      </div>
+
+
+      <div class="controls" style="display: none;">
+        <label for="sourceLang">From:</label>
+        <select id="sourceLang">
+          <option value="tl">Tagalog</option>
+          <option value="ar">العربية</option>
+        </select>
+        <label for="targetLang">To:</label>
+        <select id="targetLang">
+          <option value="ar">العربية</option>
+          <option value="tl">Tagalog</option>
+        </select>
+      </div>
+    </div>
+
+
+    <div id="confirmationModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Confirmation</h2>
+
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete this item?</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-confirm" onclick="confirmDelete()">Delete</button>
+          <button class="btn btn-cancel" onclick="closeModal()">Cancel</button>
+
+        </div>
+      </div>
+    </div>
+
+
+    <div id="dateDeleteModal" class="modal" style="display: none;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Delete Confirmation</h2>
+         
+        </div>
+        <div class="modal-body">
+          <p id="dateDeleteMessage">Are you sure you want to delete all translations for this date?</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-confirm" onclick="confirmDateDelete()">Delete</button>
+          <button class="btn btn-cancel" onclick="closeDateDeleteModal()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.6.2/fuse.min.js"></script>
+    <script src="https://code.responsivevoice.org/responsivevoice.js?key=VLoQxzOE"></script>
+    <script src="{% static 'js/users/translate.js' %}"></script>
+    <script src="https://unpkg.com/franc@6.1.0"></script>
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/intro.js/minified/intro.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script>
+document.addEventListener('DOMContentLoaded', function () {
+  // Function to detect if the screen is small (mobile or tablet)
+  function isSmallScreen() {
+    return window.innerWidth <= 768; // You can adjust the value based on your needs
+  }
+
+  // Function to toggle the sidebar visibility based on screen size
+  function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    if (isSmallScreen()) {
+      sidebar.setAttribute('data-step', '2'); // Set data-step="2" for small screens
+      sidebar.style.display = 'block'; // Optionally hide the sidebar on small screens
+    } else {
+      sidebar.removeAttribute('data-step'); // Remove the data-step on larger screens
+      sidebar.style.display = 'block'; // Show the sidebar on larger screens
+    }
+  }
+
+
+  toggleSidebar();
+  window.addEventListener('resize', toggleSidebarForSmallScreen);
+
+  // Start tutorial if required (can include your existing tutorial logic here)
+  const tutorialDataElement = document.getElementById('tutorial-data');
+  const showTutorial = tutorialDataElement && tutorialDataElement.getAttribute('data-show-tutorial') === 'true';
+
+  if (showTutorial) {
+    startTutorial(); // Assuming you have your existing startTutorial function
+  }
+});
+
+// Add your existing tutorial function here
+function startTutorial() {
+  const tutorial = introJs();
+  tutorial.start();
+}
+
+
+      async function saveTranslationToHistory(sourceText, translatedText, sourceLanguage, targetLanguage) {
+    try {
+        const response = await fetch("{% url 'save_translation_history' %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": getCSRFToken(),
+            },
+            body: JSON.stringify({
+                source_text: sourceText,
+                translated_text: translatedText,
+                source_language: sourceLanguage,
+                target_language: targetLanguage,
+            }),
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message || "Failed to save translation history");
+
+
+        await fetchTranslationHistory();
+    } catch (error) {
+        console.error("Error saving history:", error);
+    }
+}
+
+
+
+async function fetchTranslationHistory() {
+    const historyContainer = document.getElementById("history");
+    const loadingSpinner = document.getElementById("loadingSpinner");
+
+
+    loadingSpinner.style.display = "block";
+    historyContainer.innerHTML = "";
+
+    try {
+        const response = await fetch("{% url 'get_translation_history' %}");
+        if (!response.ok) throw new Error("Failed to fetch translation history");
+
+        const data = await response.json();
+        renderTranslationHistory(data.history);
+    } catch (error) {
+        console.error("Error fetching history:", error);
+        historyContainer.innerHTML = "<p>Error loading history. Please try again later.</p>";
+    } finally {
+
+        loadingSpinner.style.display = "none";
+    }
+}
+
+let openSections = {};
+
+function renderTranslationHistory(history) {
+    const historyContainer = document.getElementById("history");
+    historyContainer.innerHTML = "";
+
+    if (Object.keys(history).length === 0) {
+        historyContainer.innerHTML = "<p>No translation history available.</p>";
+        return;
+    }
+
+    for (const date in history) {
+
+        const formattedDate = new Date(date).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+        });
+
+        const dateSection = document.createElement("div");
+        dateSection.className = "history-date-section";
+
+
+        const isOpen = openSections[date] === true;
+
+
+        dateSection.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: center; font-weight: bold; margin: 10px 0;">
+                <span>${formattedDate}</span>
+                <div>
+                    <i class="fas fa-eye ${isOpen ? 'fa-eye-slash' : 'fa-eye'} load-icon" title="Toggle" onclick="toggleDateHistory('${date}')"></i>
+                    <i class="fas fa-trash-alt delete-icon" title="Delete" onclick="openDateDeleteModal('${date}')"></i>
+                </div>
+            </div>
+            <div id="history-${date}" class="history-items" style="display: ${isOpen ? "block" : "none"}; padding-left: 10px;"></div>
+        `;
+
+        historyContainer.appendChild(dateSection);
+
+
+        const historyItems = history[date].map(item => `
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;" data-item-id="${item.id}">
+                <span class="clickable-word" onclick="retranslate('${item.source_text}', '${item.source_language}', '${item.target_language}', false)">
+                    ${item.source_text}
+                </span>
+                <i class="fas fa-trash delete-icon" onclick="deleteHistoryItem(${item.id})" title="Delete"></i>
+            </div>
+        `).join("");
+
+        const historyDateContainer = dateSection.querySelector(`#history-${date}`);
+        historyDateContainer.innerHTML = historyItems;
+    }
+}
+
+function toggleDateHistory(date) {
+    const dateHistory = document.getElementById(`history-${date}`);
+    const toggleIcon = document.querySelector(`#history-${date}`).previousElementSibling.querySelector('.load-icon');
+    const isHidden = dateHistory.style.display === "none";
+
+
+    openSections[date] = isHidden;
+
+
+    dateHistory.style.display = isHidden ? "block" : "none";
+
+
+    toggleIcon.className = isHidden ? "fas fa-eye-slash load-icon" : "fas fa-eye load-icon";
+}
+
+
+let modalDate = null;
+
+function openDateDeleteModal(date) {
+    modalDate = date;
+
+
+    const formattedDate = new Date(date).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+    });
+
+    const modal = document.getElementById("dateDeleteModal");
+    const message = document.getElementById("dateDeleteMessage");
+    message.innerText = `Are you sure you want to delete all translations for ${formattedDate}?`;
+    modal.style.display = "block";
+}
+
+
+function closeDateDeleteModal() {
+    modalDate = null;
+    const modal = document.getElementById("dateDeleteModal");
+    modal.style.display = "none";
+}
+
+async function confirmDateDelete() {
+    if (!modalDate) return;
+
+    try {
+        const response = await fetch(`/delete_date_history/${modalDate}/`, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": getCSRFToken(),
+            },
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+
+            await fetchTranslationHistory();
+        } else {
+
+        }
+    } catch (error) {
+        console.error("Error deleting date history:", error);
+
+    } finally {
+        closeDateDeleteModal();
+    }
+}
+
+
+function retranslate(sourceText, sourceLang, targetLang, saveToHistory = false) {
+    document.getElementById("inputText").value = sourceText;
+
+
+    translateText(saveToHistory);
+}
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", fetchTranslationHistory);
+
+
+
+async function deleteHistoryItem(itemId) {
+    try {
+        const response = await fetch(`/delete_translation_history/${itemId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCSRFToken(),
+            },
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+
+            const itemElement = document.querySelector(`[data-item-id="${itemId}"]`);
+            if (itemElement) {
+                itemElement.remove();
+            }
+        } else {
+            alert(data.message || 'Failed to delete the item.');
+        }
+    } catch (error) {
+        console.error('Error deleting item:', error);
+        alert('An error occurred while trying to delete the item.');
+    }
+}
+
+
+
+function getCSRFToken() {
+    const cookies = document.cookie.split(';');
+    for (let cookie of cookies) {
+        if (cookie.trim().startsWith('csrftoken=')) {
+            return cookie.trim().substring('csrftoken='.length);
+        }
+    }
+    return '';
+}
+
+let modalItemId = null;
+
+function openModal(itemId) {
+  modalItemId = itemId;
+  document.getElementById('confirmationModal').style.display = 'block';
+}
+
+function closeModal() {
+  modalItemId = null;
+  document.getElementById('confirmationModal').style.display = 'none';
+}
+
+async function confirmDelete() {
+  if (!modalItemId) return;
+
+  try {
+    const response = await fetch(`/delete_translation_history/${modalItemId}/`, {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': getCSRFToken(),
+      },
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+
+      await fetchTranslationHistory();
+
+    }
+  } catch (error) {
+    console.error('Error deleting item:', error);
+
+  } finally {
+    closeModal();
+  }
+}
+
+function deleteHistoryItem(itemId) {
+  openModal(itemId);
+}
+
+
+
+
+function getCSRFToken() {
+    const name = "csrftoken";
+    const cookies = document.cookie.split(";");
+    for (let cookie of cookies) {
+        const [key, value] = cookie.trim().split("=");
+        if (key === name) {
+            return decodeURIComponent(value);
+        }
+    }
+    return "";
+}
+
+
+function toggleNav() {
+  const navbar = document.getElementById('navbar');
+  navbar.classList.toggle('show');
+}
+
+
+
+
+    </script>
+
+
+
+  </body>
+</html>

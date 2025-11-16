@@ -1,0 +1,206 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ user_profile.user.first_name }}'s Test Details</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'css/admin/admin_view_user_test.css' %}">
+</head>
+<body>
+  <!-- Header -->
+
+
+
+  <aside class="sidebar">
+    <div class="brand">Wikang Arabo</div>
+    <ul>
+      <li><a href="{% url 'admindashboard' %}"><i class="fas fa-home"></i> Dashboard</a></li>
+      <li><a href="{% url 'adminstudent' %}" ><i class="fas fa-user-graduate"></i> Students</a></li>
+      <li><a href="{% url 'add_questions' %}" ><i class="fas fa-list"></i> Questions</a> </li>
+      <li><a href="{% url 'adminscore' %}" class="active"> <i class="fas fa-chart-bar"></i> Scores</a></li>
+      <li><a href="{% url 'admin_logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+    </ul>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Header -->
+    <div class="header">
+      <div class="title">Student Score Summary</div>
+      <img src="{% static 'images/jdpixel.jpeg ' %}" alt="Profile Picture">
+    </div>
+
+    <!-- Cards Section -->
+    <div class="cards">
+      <div class="card">
+        <h3>Total Registered</h3>
+        <p>{{ total_registered }}</p>
+      </div>
+      <div class="card">
+        <h3>Active Today</h3>
+        <p>{{ active_today }}</p>
+      </div>
+      <div class="card">
+        <h3>Newly Registered</h3>
+        <p>{{ newly_registered }}</p>
+      </div>
+      <div class="card">
+        <h3>Male Students</h3>
+        <p>{{ male_students }}</p>
+      </div>
+      <div class="card">
+        <h3>Female Students</h3>
+        <p>{{ female_students }}</p>
+      </div>
+      <div class="card">
+        <h3>No. of Translation Used</h3>
+        <p>{{ total_translations }}</p>
+      </div>
+    </div>
+
+
+
+  <!-- Details Section -->
+<div class="details-container">
+    <div class="details-card">
+      <div class="details-heading">Student Information</div>
+      <p><span>Full Name:</span> {{ user_profile.first_name }} {{user_profile.middle_name}} {{ user_profile.last_name }}</p>
+      <p><span>Gender:</span> {{ user_profile.gender|title }}</p>
+      <p><span>Arabic School Student:</span> {{ user_profile.is_student|yesno:"Yes,No"}}</p>
+      <p><span>Total Tests Taken:</span> {{ user_assessments|length }}</p>
+    </div>
+  </div>
+  
+  
+
+  <!-- Test Attempts Table -->
+  <div class="table-container">
+
+    <div class="filter-container">
+        <div class="filter-group">
+          <label for="testTypeFilter">Test Type</label>
+          <select id="testTypeFilter" onchange="applyFilters()">
+            <option value="">All</option>
+            <option value="tagalog test">Tagalog Test</option>
+            <option value="arabic test">Arabic Test</option>
+          </select>
+          
+        </div>
+        <div class="filter-group">
+          <label for="dateFilter">Sort by Date Taken</label>
+          <select id="dateFilter" onchange="applyFilters()">
+            <option value="latest">Latest</option>
+            <option value="oldest">Oldest</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="scoreFilter">Sort by Score</label>
+          <select id="scoreFilter" onchange="applyFilters()">
+            <option value="highest">Highest</option>
+            <option value="lowest">Lowest</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="resultFilter">Result</label>
+          <select id="resultFilter" onchange="applyFilters()">
+            <option value="">All</option>
+            <option value="Pass">Pass</option>
+            <option value="Fail">Fail</option>
+          </select>
+        </div>
+      </div>
+      
+    <h2>Test Attempts</h2>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Test Type</th>
+          <th>Date Taken</th>
+          <th>Total Questions</th>
+          <th>Score</th>
+        
+          <th>Result</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for assessment in user_assessments %}
+        <tr>
+          <td>{{ assessment.get_test_type_display }}</td>
+          <td>{{ assessment.date_taken|date:"F d, Y h:i A" }}</td>
+          <td>{{ assessment.total_questions }}</td>
+          <td>{{ assessment.score }}</td>
+       
+          <td>{{ assessment.result }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="5">No test attempts available.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+
+  <script>
+    
+    function applyFilters() {
+  const testTypeFilter = document.getElementById("testTypeFilter").value.toLowerCase();
+  const dateFilter = document.getElementById("dateFilter").value;
+  const scoreFilter = document.getElementById("scoreFilter").value;
+  const resultFilter = document.getElementById("resultFilter").value.toLowerCase();
+
+  const table = document.querySelector(".data-table tbody");
+  const rows = Array.from(table.querySelectorAll("tr"));
+
+  // Apply filters
+  rows.forEach(row => {
+    const testType = row.cells[0]?.textContent.toLowerCase() || ""; // Test Type
+    const dateTaken = new Date(row.cells[1]?.textContent.trim()); // Includes time
+    const score = parseFloat(row.cells[3]?.textContent.trim()) || 0; // Score
+    const result = row.cells[4]?.textContent.toLowerCase() || ""; // Result
+
+    // Filtering logic
+    const matchesTestType = !testTypeFilter || testType === testTypeFilter; // Exact match for test type
+    const matchesResult = !resultFilter || result === resultFilter; // Exact match for result
+
+    if (matchesTestType && matchesResult) {
+      row.style.display = "";
+    } else {
+      row.style.display = "none";
+    }
+  });
+
+  // Apply sorting for Date Taken
+  if (dateFilter) {
+    rows.sort((a, b) => {
+      const dateA = new Date(a.cells[1]?.textContent.trim()); // Date with time
+      const dateB = new Date(b.cells[1]?.textContent.trim()); // Date with time
+
+      // Sort based on selected option
+      return dateFilter === "latest" ? dateB - dateA : dateA - dateB;
+    });
+  }
+
+  // Apply sorting for Score
+  if (scoreFilter) {
+    rows.sort((a, b) => {
+      const scoreA = parseFloat(a.cells[3]?.textContent.trim()) || 0; // Score column
+      const scoreB = parseFloat(b.cells[3]?.textContent.trim()) || 0;
+
+      // Sort based on selected option
+      return scoreFilter === "highest" ? scoreB - scoreA : scoreA - scoreB;
+    });
+  }
+
+  // Re-append sorted rows to the table
+  rows.forEach(row => table.appendChild(row));
+}
+
+
+
+  </script>
+</body>
+</html>

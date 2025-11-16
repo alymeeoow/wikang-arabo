@@ -1,0 +1,443 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/admin/admin_dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin/questions.css ' %}">
+    <title>{{ title }}</title>
+ 
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="brand">Wikang Arabo</div>
+        <ul>
+            <li><a href="{% url 'admindashboard' %}"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="{% url 'adminstudent' %}" ><i class="fas fa-user-graduate"></i> Students</a></li>
+            <li><a href="{% url 'add_questions' %}" class="active"><i class="fas fa-list"></i> Questions</a> </li>
+            <li><a href="{% url 'adminscore' %}"><i class="fas fa-chart-bar"></i> Scores</a></li>
+            <li><a href="{% url 'admin_logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </aside>
+
+    
+
+    <!-- Main Content -->
+    <div class="content">
+        <div class="header">
+            <div class="title">Questions</div>
+            <!-- Add Question Button -->
+            <a href="#" class="add-button" onclick="openQuestionForm()">
+                <i class="fas fa-plus-circle"></i> Add Question
+            </a>
+            
+        </div>
+
+
+        <!-- Add Section -->
+<div id="questionModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close" onclick="closeQuestionForm()">&times;</span>
+        <h2>Add Questions</h2>
+        <form id="addQuestionsForm" method="post">
+            {% csrf_token %}
+            <div id="questionsContainer">
+                <div class="question-group">
+                    <label>Question Type:</label>
+                    <select name="questions[0][model]" required>
+                        <option value="TagalogQuestion">Tagalog to Arabic</option>
+                        <option value="ArabicQuestion">Arabic to Tagalog</option>
+                    </select>
+
+                    <label  style="display:none;">Question Format:</label>
+                    <select  style="display:none;" name="questions[0][question_type]" required>
+                        <option value="multiple_choice" selected>Multiple Choice</option>
+                        <option value="word_completion">Word Completion</option>
+                    </select>
+
+                    <label>Question:</label>
+                    <input type="text" name="questions[0][text]" required>
+
+                    <label>Correct Answer:</label>
+                    <input type="text" name="questions[0][correct_answer]" required>
+
+                    <label>Choices:</label>
+                    <input type="text" name="questions[0][option_1]" placeholder="Option 1" required>
+                    <input type="text" name="questions[0][option_2]" placeholder="Option 2" required>
+                    <input type="text" name="questions[0][option_3]" placeholder="Option 3" required>
+                    <input type="text" name="questions[0][option_4]" placeholder="Option 4" required>
+                </div>
+            </div>
+            <button style=" background-color:#16A085;" type="button" onclick="addMoreQuestion()">Add Another Question</button>
+            <button  style=" background-color:#16A085;" type="submit">Submit</button>
+        </form>
+    </div>
+</div>
+
+
+
+        <!-- Edit Section -->
+<div id="editQuestionModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close" onclick="closeEditQuestionForm()">&times;</span>
+        <h2>Edit Question</h2>
+        <form id="editQuestionForm" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="question_id" id="editQuestionId">
+        
+            <div class="question-group">
+                <label>Question:</label>
+                <input type="text" name="text" id="editQuestionText" required>
+
+                <label>Correct Answer:</label>
+                <input type="text" name="correct_answer" id="editCorrectAnswer" required>
+
+                <label>Choices:</label>
+                <input type="text" name="option_1" id="editOption1" placeholder="Option 1" required>
+                <input type="text" name="option_2" id="editOption2" placeholder="Option 2" required>
+                <input type="text" name="option_3" id="editOption3" placeholder="Option 3" required>
+                <input type="text" name="option_4" id="editOption4" placeholder="Option 4" required>
+            </div>
+
+            <button  style=" background-color:#16A085;" type="submit">Save Changes</button>
+        </form>
+    </div>
+</div>
+
+
+
+        <!-- Cards Section -->
+        <div class="cards">
+            <div class="card">
+                <h3>Total Registered</h3>
+                <p>{{ total_registered }}</p>
+            </div>
+            <div class="card">
+                <h3>Active Today</h3>
+                <p>{{ active_today }}</p>
+            </div>
+            <div class="card">
+                <h3>Newly Registered</h3>
+                <p>{{ newly_registered }}</p>
+            </div>
+            <div class="card">
+                <h3>Male Students</h3>
+                <p>{{ male_students }}</p>
+            </div>
+            <div class="card">
+                <h3>Female Students</h3>
+                <p>{{ female_students }}</p>
+            </div>
+            <div class="card">
+                <h3>No. of Translation Used </h3>
+                <p>{{ total_translations }}</p>
+            </div>
+        </div>
+    
+        <div class="form-container">
+            <form method="get">
+                <label style="margin-top: 10px;" for="section-type">Select Section:</label>
+                <select id="section-type" name="type" onchange="this.form.submit()">
+                    <option value="tagalog" {% if question_type == 'tagalog' %}selected{% endif %}>Tagalog</option>
+                    <option value="arabic" {% if question_type == 'arabic' %}selected{% endif %}>Arabic</option>
+                </select>
+            </form>
+            
+        </div>
+        
+
+
+
+    
+        <table>
+            <thead>
+                <tr>
+                    <th>Question</th>
+                    <th>Answer</th> 
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for question in questions %}
+                <tr>
+                    <td>{{ question.question_text }}</td>
+                    <td style="font-size: 14px;">{{ question.correct_answer }}</td>
+
+
+                    <td>
+                        <a href="#" onclick="openEditQuestionForm({ 
+                            id: '{{ question.id|escapejs }}', 
+                            model: '{{ question.model|escapejs }}', 
+                            question_text: '{{ question.question_text|escapejs }}', 
+                            correct_answer: '{{ question.correct_answer|escapejs }}', 
+                            option_1: '{{ question.option_1|escapejs }}', 
+                            option_2: '{{ question.option_2|escapejs }}', 
+                            option_3: '{{ question.option_3|escapejs }}', 
+                            option_4: '{{ question.option_4|escapejs }}'
+                        })">Edit</a> | 
+                      <a href="#" onclick="openDeleteConfirmationModal('{{ question.id|escapejs }}')">Delete</a>
+
+                    </td>
+                    
+                    
+                
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">No questions found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+
+
+      
+<div id="successModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close" onclick="closeSuccessModal()">&times;</span>
+        <h2>Success!</h2>
+        <p>Your question(s) have been added successfully.</p>
+        <button style="margin-top: 5px;" onclick="closeSuccessModal()">OK</button>
+    </div>
+</div>
+
+
+<div id="editSuccessModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close" onclick="closeEditSuccessModal()">&times;</span>
+        <h2>Success!</h2>
+        <p>Your question has been updated successfully.</p>
+        <button style="margin-top: 5px;" onclick="closeEditSuccessModal()">OK</button>
+    </div>
+</div>
+
+
+<div id="deleteConfirmationModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close" onclick="closeDeleteConfirmationModal()">&times;</span>
+        <h2>Confirm Deletion</h2>
+        <p>Are you sure you want to delete this question?</p>
+        <button  style=" background-color:#16A085;"  id="confirmDeleteButton" style="background-color: #e74c3c; color: white; margin: 10px;">Confirm</button>
+        <button onclick="closeDeleteConfirmationModal()" style="margin: 10px;">Cancel</button>
+    </div>
+</div>
+
+
+<div id="deleteSuccessModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close" onclick="closeDeleteSuccessModal()">&times;</span>
+        <h2>Success!</h2>
+        <p>Your question has been deleted successfully.</p>
+        <button style="margin: 0 auto; display: block ; margin-top: 5px; background-color:#16A085;" onclick="closeDeleteSuccessModal()">OK</button>
+    </div>
+</div>
+
+
+
+
+    </div>
+
+
+
+
+    <script>
+        function openQuestionForm() {
+    document.getElementById("questionModal").style.display = "flex";
+}
+
+function closeQuestionForm() {
+    document.getElementById("questionModal").style.display = "none";
+}
+
+let questionIndex = 1;
+
+function addMoreQuestion() {
+    const container = document.getElementById("questionsContainer");
+    const newQuestion = document.createElement("div");
+    newQuestion.classList.add("question-group");
+    newQuestion.setAttribute("id", `question-${questionIndex}`); 
+
+    newQuestion.innerHTML = `
+        <hr style="margin: 20px 0; border: 1px solid black;"> <!-- Black separator line -->
+        <button type="button" class="remove-question" onclick="removeQuestion(${questionIndex})" style="margin-bottom: 10px;">Remove</button>
+
+        <label>Question Type:</label>
+        <select name="questions[${questionIndex}][model]" required>
+            <option value="TagalogQuestion">Tagalog to Arabic</option>
+            <option value="ArabicQuestion">Arabic to Tagalog</option>
+        </select>
+
+        <label style="display:none;" >Question Format:</label>
+        <select style="display:none;" name="questions[${questionIndex}][question_type]" required>
+            <option value="multiple_choice" selected>Multiple Choice</option>
+            <option value="word_completion">Word Completion</option>
+        </select>
+
+        <label>Question:</label>
+        <input type="text" name="questions[${questionIndex}][text]" required>
+
+        <label>Correct Answer:</label>
+        <input type="text" name="questions[${questionIndex}][correct_answer]" required>
+
+        <label>Choices:</label>
+        <input type="text" name="questions[${questionIndex}][option_1]" placeholder="Option 1" required>
+        <input type="text" name="questions[${questionIndex}][option_2]" placeholder="Option 2" required>
+        <input type="text" name="questions[${questionIndex}][option_3]" placeholder="Option 3" required>
+        <input type="text" name="questions[${questionIndex}][option_4]" placeholder="Option 4" required>
+    `;
+
+    container.appendChild(newQuestion);
+    questionIndex++;
+}
+
+
+
+function removeQuestion(index) {
+    const questionGroup = document.getElementById(`question-${index}`);
+    if (questionGroup) {
+        questionGroup.remove();
+    }
+}
+
+
+document.getElementById("addQuestionsForm").addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const formData = new FormData(this);
+
+    fetch("{% url 'add_questions_ajax' %}", {
+        method: "POST",
+        body: formData,
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                openSuccessModal(); 
+                closeQuestionForm(); 
+            } else {
+                alert("Error adding questions. Please try again.");
+            }
+        })
+        .catch(error => console.error("Error:", error));
+});
+
+function openSuccessModal() {
+    document.getElementById("successModal").style.display = "flex";
+}
+
+function closeSuccessModal() {
+    document.getElementById("successModal").style.display = "none";
+    location.reload(); 
+}
+function openEditQuestionForm(question) {
+    console.log("Opening edit form for question:", question);
+
+    document.getElementById("editQuestionId").value = question.id || '';
+    document.getElementById("editQuestionText").value = question.question_text || '';
+    document.getElementById("editCorrectAnswer").value = question.correct_answer || '';
+    document.getElementById("editOption1").value = question.option_1 || '';
+    document.getElementById("editOption2").value = question.option_2 || '';
+    document.getElementById("editOption3").value = question.option_3 || '';
+    document.getElementById("editOption4").value = question.option_4 || '';
+
+    document.getElementById("editQuestionModal").style.display = "flex";
+}
+
+
+
+
+
+function closeEditQuestionForm() {
+    document.getElementById("editQuestionModal").style.display = "none";
+}
+
+document.getElementById("editQuestionForm").addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const formData = new FormData(this);
+
+    fetch("{% url 'edit_questions_ajax' %}", {
+        method: "POST",
+        body: formData,
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                closeEditQuestionForm(); 
+                openEditSuccessModal();     
+            } else {
+                alert("Error updating question. Please try again.");
+            }
+        })
+        .catch(error => console.error("Error:", error));
+});
+
+function openEditSuccessModal() {
+    document.getElementById("editSuccessModal").style.display = "flex";
+}
+
+function closeEditSuccessModal() {
+    document.getElementById("editSuccessModal").style.display = "none";
+    location.reload(); 
+}
+
+
+let questionToDelete = null;
+
+// Open the delete confirmation modal
+function openDeleteConfirmationModal(questionId) {
+    questionToDelete = questionId; // Store the question ID to delete
+    document.getElementById("deleteConfirmationModal").style.display = "flex";
+}
+
+// Close the delete confirmation modal
+function closeDeleteConfirmationModal() {
+    questionToDelete = null; // Clear the stored question ID
+    document.getElementById("deleteConfirmationModal").style.display = "none";
+}
+
+// Perform the delete action on confirmation
+document.getElementById("confirmDeleteButton").addEventListener("click", function () {
+    if (questionToDelete) {
+        fetch("{% url 'delete_questions_ajax' %}", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ question_id: questionToDelete }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    closeDeleteConfirmationModal(); // Close the confirmation modal
+                    openDeleteSuccessModal(); // Open the success modal
+                } else {
+                    alert("Error deleting question. Please try again.");
+                }
+            })
+            .catch(error => console.error("Error:", error));
+    }
+});
+
+// Open the delete success modal
+function openDeleteSuccessModal() {
+    document.getElementById("deleteSuccessModal").style.display = "flex";
+}
+
+// Close the delete success modal and refresh the page
+function closeDeleteSuccessModal() {
+    document.getElementById("deleteSuccessModal").style.display = "none";
+    location.reload(); // Refresh the page to update the question list
+}
+
+
+
+    </script>
+    
+</body>
+</html>

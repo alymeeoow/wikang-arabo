@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSRF Verification Failed</title>
+    <link rel="stylesheet" href="{% static 'css/errors/error.css' %}">
+   
+</head>
+<body>
+    <div class="overlay"></div>
+    <div class="container">
+        <img src="{% static 'images/TAlogo.png' %}" alt="WIKANG ARABO Logo" class="logo">
+        <h1>CSRF Verification Failed</h1>
+        <p>It looks like something went wrong when submitting your request.</p>
+        <p>Possible reasons could include:</p>
+        <ul>
+            <li>Your session expired.</li>
+            <li>You tried to submit the form from an external site.</li>
+            <li>Cookies are disabled in your browser.</li>
+        </ul>
+        <p>Please try the following:</p>
+        <ul>
+            <li>Refresh the page and try again.</li>
+            <li>Ensure that cookies are enabled in your browser settings.</li>
+            <li>If you continue to experience issues, contact our support team.</li>
+        </ul>
+        <a href="{% url 'login' %}" class="btn-primary">Return to Login</a>
+    </div>
+</body>
+</html>

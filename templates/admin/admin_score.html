@@ -1,0 +1,234 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Test Scores</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'css/admin/admin_student.css' %}">
+  <link rel="icon" type="image/png" href="{% static 'images/TAlogo.png' %}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">Wikang Arabo</div>
+    <ul>
+      <li><a href="{% url 'admindashboard' %}" ><i class="fas fa-home"></i> Dashboard</a></li>
+      <li><a href="{% url 'adminstudent' %}"    >   <i class="fas fa-user-graduate"></i> Students</a></li>
+      <li><a href="{% url 'add_questions' %}" ><i class="fas fa-list"></i> Questions</a> </li>
+      <li><a href="{% url 'adminscore' %}" class="active"><i class="fas fa-chart-bar"></i> Scores</a></li>
+      <li><a href="{% url 'admin_logout'   %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+    </ul>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Header -->
+    <div class="header">
+      <div class="title">Test Scores</div>
+
+    </div>
+
+    <!-- Cards Section -->
+    <div class="cards">
+      <div class="card">
+        <h3>Total Registered</h3>
+        <p>{{ total_registered }}</p>
+      </div>
+      <div class="card">
+        <h3>Active Today</h3>
+        <p>{{ active_today }}</p>
+      </div>
+      <div class="card">
+        <h3>Newly Registered</h3>
+        <p>{{ newly_registered }}</p>
+      </div>
+      <div class="card">
+        <h3>Male Students</h3>
+        <p>{{ male_students }}</p>
+      </div>
+      <div class="card">
+        <h3>Female Students</h3>
+        <p>{{ female_students }}</p>
+      </div>
+      <div class="card">
+        <h3>No. of Translation Used </h3>
+        <p>{{ total_translations }}</p>
+      </div>
+    </div>
+
+    <!-- Charts Section -->
+
+
+    <div class="table-container">
+
+      <div class="filter-container">
+        <div class="filter-group">
+          <label for="searchInput">Search</label>
+          <input type="text" id="searchInput" placeholder="Search by name..." onkeyup="filterSummaryTable()">
+        </div>
+
+        <div class="filter-group" style="display: none;">
+          <label for="nameSort">Sort by Name</label>
+          <select id="nameSort" onchange="sortByName()">
+            <option value="asc" selected>A to Z</option>
+            <option value="desc">Z to A</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="genderFilter">Gender</label>
+          <select id="genderFilter" onchange="filterSummaryTable()">
+            <option value="">All</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="arabicSchoolFilter">Arabic School Student</label>
+          <select id="arabicSchoolFilter" onchange="filterSummaryTable()">
+            <option value="">All</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="sortAverageScore">Sort by Average Score</label>
+          <select id="sortAverageScore" onchange="sortSummaryTable()">
+            <option value="">None</option>
+            <option value="highest">Highest</option>
+            <option value="lowest">Lowest</option>
+          </select>
+        </div>
+
+      </div>
+
+
+      <h2>Student Test Summary</h2>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Gender</th>
+            <th>No. of Test Taken</th>
+            <th>Average Score (%)</th>
+            <th> Arabic School Student</th>
+            <th>View</th>
+
+          </tr>
+        </thead>
+        <tbody id="summaryTableBody">
+          {% for user in users_with_assessments %}
+            <tr>
+              <td>{{ user.first_name }} {{ user.last_name }}</td>
+              <td>{{ user.gender|title }}</td>
+              <td>{{ user.total_attempts }}</td>
+              <td>{{ user.average_score }}</td>
+              <td>{{ user.is_student|yesno:"Yes,No" }}</td>
+              <td>
+                <a href="{% url 'view_user_tests' user.user.id %}" class="view-button" title="View Details">
+                  <i class="fas fa-eye" style="color: black;"></i>
+                </a>
+              </td>
+
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+
+
+
+  </div>
+
+  <script>
+function filterSummaryTable() {
+  const searchInput = document.getElementById("searchInput").value.toLowerCase();
+  const genderFilter = document.getElementById("genderFilter").value.toLowerCase();
+  const arabicSchoolFilter = document.getElementById("arabicSchoolFilter").value.toLowerCase();
+  const table = document.querySelector(".data-table tbody");
+  const rows = table.querySelectorAll("tr");
+
+  rows.forEach(row => {
+    const name = row.cells[0]?.textContent.toLowerCase() || "";
+    const gender = row.cells[1]?.textContent.toLowerCase() || "";
+    const arabicSchool = row.cells[4]?.textContent.toLowerCase() || "";
+
+
+    const matchesSearch = name.includes(searchInput);
+    const matchesGender = !genderFilter || gender === genderFilter;
+    const matchesArabicSchool = !arabicSchoolFilter || arabicSchool === arabicSchoolFilter;
+
+
+    if (matchesSearch && matchesGender && matchesArabicSchool) {
+      row.style.display = "";
+    } else {
+      row.style.display = "none";
+    }
+  });
+}
+
+function sortSummaryTable() {
+  const table = document.querySelector(".data-table tbody");
+  const rows = Array.from(table.querySelectorAll("tr"));
+  const sortAverageScore = document.getElementById("sortAverageScore").value;
+
+
+  if (!sortAverageScore) return;
+
+  if (sortAverageScore === "highest" || sortAverageScore === "lowest") {
+    rows.sort((a, b) => {
+      const scoreA = parseFloat(a.cells[3]?.textContent.trim()) || 0;
+      const scoreB = parseFloat(b.cells[3]?.textContent.trim()) || 0;
+
+
+      if (isNaN(scoreA)) scoreA = 0;
+      if (isNaN(scoreB)) scoreB = 0;
+
+
+      return sortAverageScore === "lowest" ? scoreA - scoreB : scoreB - scoreA;
+    });
+  }
+
+
+  rows.forEach(row => table.appendChild(row));
+}
+
+function sortByName() {
+  const table = document.querySelector(".data-table tbody");
+  const rows = Array.from(table.querySelectorAll("tr"));
+  const sortOrder = document.getElementById("nameSort").value;
+
+  rows.sort((a, b) => {
+    const nameA = a.cells[0]?.textContent.trim().toLowerCase();
+    const nameB = b.cells[0]?.textContent.trim().toLowerCase();
+
+    if (nameA < nameB) return sortOrder === "asc" ? -1 : 1;
+    if (nameA > nameB) return sortOrder === "asc" ? 1 : -1;
+    return 0;
+  });
+
+
+  rows.forEach(row => table.appendChild(row));
+}
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("nameSort").value = "asc";
+  sortByName();
+});
+
+
+
+  </script>
+
+
+
+
+
+</body>
+</html>

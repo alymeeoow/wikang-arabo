@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Analyzer</title>
+</head>
+<body>
+    <h1>Analyze Your Voice</h1>
+    <button id="recordButton" onclick="recordAndAnalyzeVoice()">Record and Analyze</button>
+    <p id="result"></p>
+
+    <script>
+        async function recordAndAnalyzeVoice() {
+            const recordButton = document.getElementById("recordButton");
+            const resultDisplay = document.getElementById("result");
+            recordButton.disabled = true; // Disable button while recording is in progress
+
+            try {
+                // Request microphone access
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                const mediaRecorder = new MediaRecorder(stream, {
+                    mimeType: "audio/webm" // Ensures compatibility across browsers
+                });
+                const audioChunks = [];
+
+                // Collect audio data as it becomes available
+                mediaRecorder.ondataavailable = (event) => {
+                    audioChunks.push(event.data);
+                };
+
+                // Handle the stop event
+                mediaRecorder.onstop = async () => {
+                    // Combine all audio chunks into a Blob
+                    const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
+
+                    // Prepare FormData to send the audio file to the backend
+                    const formData = new FormData();
+                    formData.append("audio_file", audioBlob, "voice_input.webm");
+
+                    try {
+                        // Send the audio file to the server
+                        const response = await fetch("{% url 'analyze_voice'%}", {
+                            method: "POST",
+                            body: formData,
+                        });
+
+                        // Parse and display the server's response
+                        const result = await response.json();
+                        if (response.ok) {
+                            resultDisplay.textContent = `Spoken Text: ${result.spoken_text}, Detected Language: ${result.detected_language}, Confidence: ${(result.confidence * 100).toFixed(2)}%`;
+                        } else {
+                            resultDisplay.textContent = `Error: ${result.error}`;
+                        }
+                    } catch (error) {
+                        console.error("Error sending audio to the server:", error);
+                        resultDisplay.textContent = "An error occurred while analyzing the audio. Please try again.";
+                    }
+                };
+
+                // Start recording audio
+                mediaRecorder.start();
+                resultDisplay.textContent = "Recording... Speak into your microphone.";
+
+                // Stop recording after 5 seconds
+                setTimeout(() => {
+                    mediaRecorder.stop();
+                    stream.getTracks().forEach((track) => track.stop()); // Stop the microphone stream
+                }, 5000); // Record for 5 seconds
+            } catch (error) {
+                console.error("Error accessing microphone:", error);
+                resultDisplay.textContent = "Could not access your microphone. Please ensure microphone permissions are granted.";
+            } finally {
+                recordButton.disabled = false; // Re-enable the button
+            }
+        }
+    </script>
+</body>
+</html>

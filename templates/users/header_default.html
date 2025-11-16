@@ -1,0 +1,22 @@
+{% load static %}
+<div class="header">
+  <img src="{% static 'images/TAlogo.png' %}" class="logo" alt="Logo" />
+
+  <!-- Navbar -->
+  <div class="navbar" id="navbar">
+    <a class="{% if request.resolver_match.url_name == 'translate' %}active{% endif %}" href="{% url 'translate' %}">Translate</a>
+    <a class="{% if request.resolver_match.url_name == 'arabic_alphabet' %}active{% endif %}" href="{% url 'arabic_alphabet' %}">Alphabet</a>
+    <a class="{% if request.resolver_match.url_name == 'assesschoose' %}active{% endif %}" href="{% url 'assesschoose' %}">Assessment</a>
+    <a class="{% if request.resolver_match.url_name == 'dictionary' %}active{% endif %}" href="{% url 'dictionary' %}">Dictionary</a>
+    <a class="{% if request.resolver_match.url_name == 'profile' %}active{% endif %}" href="{% url 'profile' %}">Profile</a>
+    <form id="logoutForm" action="{% url 'logout' %}" method="post">
+      {% csrf_token %}
+      <button type="submit" class="logout-btn">
+        <i class="fas fa-sign-out-alt" title="Logout"></i>
+      </button>
+    </form>
+  </div>
+
+  <!-- Burger Menu -->
+  <button class="burger-menu" id="burgerMenu" onclick="toggleNav()">☰</button>
+</div>

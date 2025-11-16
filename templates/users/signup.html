@@ -1,0 +1,95 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TAG-ARAB Signup</title>
+
+
+    <link rel="stylesheet" href="{% static 'css/users/signup.css' %}" />
+    <link rel="icon" type="image/png" href="{% static 'images/TAlogo.png' %}" />
+  </head>
+
+  <body>
+
+    <div class="hero">
+      <div class="hero-overlay"></div>
+
+
+      <div class="login-box">
+
+        <img src="{% static 'images/TAlogo.png' %}" alt="WIKANG ARABO Logo" class="logo" />
+
+        <h1>SIGN-UP</h1>
+        <p class="subtitle">Bridging Languages, Connecting Cultures</p>
+
+        <div id="errorMessage" class="error-message" style="display: none;">
+          {% for message in messages %}
+          <p class="error-text">{{ message }}{% if not forloop.last %}<br />{% endif %}</p>
+          {% endfor %}
+        </div>
+
+
+        <form method="POST" action="">
+          {% csrf_token %}
+          <div class="input-group">
+            <label for="email">Email </label>
+            <input type="email" id="email" name="email" required spellcheck="false" />
+          </div>
+
+          <div class="input-group">
+            <label for="username">Username </label>
+            <input type="text" id="username" name="username" required spellcheck="false" />
+          </div>
+
+          <div class="input-group">
+            <label for="password">Password </label>
+            <input type="password" id="password" name="password" required />
+          </div>
+
+          <div class="input-group">
+            <label for="confirm_password">Confirm Password </label>
+            <input type="password" id="confirm_password" name="confirm_password" required />
+          </div>
+
+          <div class="show-password">
+            <input type="checkbox" id="show" />
+            <label for="show">Show Password </label>
+          </div>
+
+
+          <button id="submit" type="submit" class="btn-primary">Sign Up </button>
+        </form>
+
+
+        <div class="additional-links">
+          <p class="forgot" onclick="redirect2()">Back to Login </p>
+        </div>
+      </div>
+    </div>
+
+
+    <script>
+
+      document.getElementById('show').addEventListener('change', function () {
+        const passwordField = document.getElementById('password');
+        const confirmPasswordField = document.getElementById('confirm_password');
+        passwordField.type = this.checked ? 'text' : 'password';
+        confirmPasswordField.type = this.checked ? 'text' : 'password';
+      });
+
+
+      function redirect2() {
+        window.location.href = "{% url 'login' %}";
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        var errorMessages = document.querySelectorAll('.error-message p');
+        if (errorMessages.length > 0) {
+          document.getElementById('errorMessage').style.display = 'block';
+        }
+      });
+    </script>
+  </body>
+</html>
